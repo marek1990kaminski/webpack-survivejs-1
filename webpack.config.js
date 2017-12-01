@@ -16,8 +16,18 @@ module.exports = {
         path: PATHS.build,
         filename: "[name].js", // In this case [name] will be replaced by the name of the entry - 'app'.
     },
+    devtool: 'inline-source-map',
+    module: {
+        rules: [
+            {
+                test: /\.html$/,
+                use: ['html-loader']
+            },
+        ]
+    },
     plugins: [
         new HtmlWebpackPlugin({
+            template: './app/index.html',
             title: "Webpack demo",
         }),
         new CleanWebpackPlugin(['build']),
