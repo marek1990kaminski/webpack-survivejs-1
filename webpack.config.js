@@ -22,4 +22,13 @@ module.exports = {
         }),
         new CleanWebpackPlugin(['build']),
     ],
+    devServer: {
+        port: 9000,
+        // overlay: true is equivalent
+        overlay: {
+            errors: true,
+            warnings: true,
+        },
+        /*https: true*/
+    }
 };
