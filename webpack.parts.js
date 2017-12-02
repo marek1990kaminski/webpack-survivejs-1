@@ -1,12 +1,12 @@
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const extractPlugin = new ExtractTextPlugin({
-    filename: 'main.scss'
+    filename: 'main.css'
 });
 
 exports.devConf = ({host, port} = {}) => ({
     devtool: 'inline-source-map',
     devServer: {
-        stats: "errors-only",
+        stats: "normal", /*errors-only, minimal, none, normal, detailed, verbose*/
         host,
         port,
         overlay: {
@@ -26,7 +26,16 @@ exports.loadCSS = ({include, exclude} = {}) => ({
                 include,
                 exclude,
 
-                use: ["style-loader", "css-loader", 'sass-loader'],
+                use: [
+                    "style-loader",
+                    {
+                        loader: 'css-loader',
+                        options: {sourceMap: true}
+                    }, {
+                        loader: 'sass-loader',
+                        options: {sourceMap: true}
+                    },
+                ]
             },
         ],
     },
