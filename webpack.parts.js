@@ -1,3 +1,8 @@
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const extractPlugin = new ExtractTextPlugin({
+    filename: 'main.scss'
+});
+
 exports.devConf = ({host, port} = {}) => ({
     devtool: 'inline-source-map',
     devServer: {
@@ -26,3 +31,19 @@ exports.loadCSS = ({include, exclude} = {}) => ({
         ],
     },
 });
+
+exports.loadCSSProd = {
+    module: {
+        rules: [
+            {
+                test: /\.scss$/,
+                use: extractPlugin.extract({
+                    use: ['css-loader', 'sass-loader'],
+                }),
+            },
+        ]
+    },
+    plugins: [
+        extractPlugin,
+    ]
+};

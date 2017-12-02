@@ -25,6 +25,17 @@ const commonConfig = merge([
                     test: /\.html$/,
                     use: ['html-loader']
                 },
+                {
+                    test: /\.js$/,
+                    use: [
+                        {
+                            loader: 'babel-loader',
+                            options: {
+                                presets: ['env']
+                            },
+                        }
+                    ]
+                },
             ]
         },
         plugins: [
@@ -35,10 +46,9 @@ const commonConfig = merge([
             new CleanWebpackPlugin(['build']),
         ],
     },
-    parts.loadCSS(),
 ]);
 
-const productionConfig = merge([]);
+const productionConfig = merge([parts.loadCSSProd,]);
 
 const developmentConfig = merge([
     parts.devConf({
@@ -46,6 +56,8 @@ const developmentConfig = merge([
         host: /*"0.0.0.0"*/process.env.HOST,
         port: 9000/*process.env.PORT*/,
     }),
+    parts.loadCSS(),
+
 ]);
 
 module.exports = env => {
