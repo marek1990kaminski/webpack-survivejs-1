@@ -1,13 +1,16 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const merge = require("webpack-merge");
+const devConf = require("./webpack.dev");
+const prodConf = require("./webpack.prod");
 
 const PATHS = {
     app: path.join(__dirname, "app"),
     build: path.join(__dirname, "build"),
 };
 
-module.exports = {
+const commonConfig = {
 
     entry: {
         app: PATHS.app,
@@ -16,7 +19,7 @@ module.exports = {
         path: PATHS.build,
         filename: "[name].js", // In this case [name] will be replaced by the name of the entry - 'app'.
     },
-    devtool: 'inline-source-map',
+
     module: {
         rules: [
             {
@@ -32,13 +35,22 @@ module.exports = {
         }),
         new CleanWebpackPlugin(['build']),
     ],
-    devServer: {
-        port: 9000,
-        // overlay: true is equivalent
-        overlay: {
-            errors: true,
-            warnings: true,
-        },
-        /*https: true*/
+};
+
+const productionConfig = merge([prodConf.prod]);
+
+const developmentConfig = merge([
+    devConf.devConf({
+        // Customize host/port here if needed
+        host: /*"0.0.0.0"*/process.env.HOST,
+        port: 9000/*process.env.PORT*/,
+    }),
+]);
+
+module.exports = env => {
+    if (env === "production") {
+        return merge(commonConfig, productionConfig);
     }
+
+    return merge(commonConfig, developmentConfig);
 };
