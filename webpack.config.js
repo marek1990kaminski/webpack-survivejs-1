@@ -2,45 +2,46 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const merge = require("webpack-merge");
-const devConf = require("./webpack.dev");
-const prodConf = require("./webpack.prod");
+const parts = require("./webpack.parts");
+
 
 const PATHS = {
-    app: path.join(__dirname, "app"),
+    app: path.join(__dirname, "app/js"),
     build: path.join(__dirname, "build"),
 };
 
-const commonConfig = {
-
-    entry: {
-        app: PATHS.app,
+const commonConfig = merge([
+    {
+        entry: {
+            app: PATHS.app,
+        },
+        output: {
+            path: PATHS.build,
+            filename: "[name].js", // In this case [name] will be replaced by the name of the entry - 'app'.
+        },
+        module: {
+            rules: [
+                {
+                    test: /\.html$/,
+                    use: ['html-loader']
+                },
+            ]
+        },
+        plugins: [
+            new HtmlWebpackPlugin({
+                template: './app/index.html',
+                title: "Webpack demo",
+            }),
+            new CleanWebpackPlugin(['build']),
+        ],
     },
-    output: {
-        path: PATHS.build,
-        filename: "[name].js", // In this case [name] will be replaced by the name of the entry - 'app'.
-    },
+    parts.loadCSS(),
+]);
 
-    module: {
-        rules: [
-            {
-                test: /\.html$/,
-                use: ['html-loader']
-            },
-        ]
-    },
-    plugins: [
-        new HtmlWebpackPlugin({
-            template: './app/index.html',
-            title: "Webpack demo",
-        }),
-        new CleanWebpackPlugin(['build']),
-    ],
-};
-
-const productionConfig = merge([prodConf.prod]);
+const productionConfig = merge([]);
 
 const developmentConfig = merge([
-    devConf.devConf({
+    parts.devConf({
         // Customize host/port here if needed
         host: /*"0.0.0.0"*/process.env.HOST,
         port: 9000/*process.env.PORT*/,
