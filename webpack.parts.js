@@ -1,7 +1,4 @@
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const extractPlugin = new ExtractTextPlugin({
-    filename: 'main.css'
-});
 
 exports.devConf = ({host, port} = {}) => ({
     devtool: 'inline-source-map',
@@ -41,18 +38,37 @@ exports.loadCSS = ({include, exclude} = {}) => ({
     },
 });
 
-exports.loadCSSProd = {
-    module: {
-        rules: [
-            {
-                test: /\.scss$/,
-                use: extractPlugin.extract({
-                    use: ['css-loader', 'sass-loader'],
-                }),
-            },
-        ]
-    },
-    plugins: [
-        extractPlugin,
-    ]
+exports.loadCSSProd = ({exclude, include, use}) => {
+    // Output extracted CSS to a file
+    const plugin = new ExtractTextPlugin({
+        // `allChunks` is needed with CommonsChunkPlugin to extract
+        // from extracted chunks as well.
+        allChunks: true,
+        filename: "[name].css",
+    });
+    return {
+        module: {
+            rules: [
+                {
+                    test: /\.scss$/,
+                    include,
+                    exclude,
+                    use: plugin.extract({
+                        use,
+                        fallback: 'style-loader'
+                    }),
+                },
+            ]
+        },
+        plugins: [
+            plugin,
+        ],
+    }
 };
+
+exports.autoprefix = () => ({
+    loader: "postcss-loader",
+    options: {
+        plugins: () => [require("autoprefixer")()],
+    },
+});

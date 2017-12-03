@@ -18,6 +18,7 @@ const commonConfig = merge([
         output: {
             path: PATHS.build,
             filename: "[name].js", // In this case [name] will be replaced by the name of the entry - 'app'.
+            publicPath: ""
         },
         module: {
             rules: [
@@ -48,7 +49,7 @@ const commonConfig = merge([
     },
 ]);
 
-const productionConfig = merge([parts.loadCSSProd,]);
+const productionConfig = merge([parts.loadCSSProd({use: ['css-loader', 'sass-loader', parts.autoprefix()]}),]);
 
 const developmentConfig = merge([
     parts.devConf({
@@ -67,3 +68,4 @@ module.exports = env => {
 
     return merge(commonConfig, developmentConfig);
 };
+
