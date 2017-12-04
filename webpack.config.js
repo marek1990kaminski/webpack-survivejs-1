@@ -57,6 +57,12 @@ const productionConfig = merge([
     parts.purifyCSS({
         paths: glob.sync(`${PATHS.app}/**/*.js`, {nodir: true}),
     }),
+    parts.loadImages({
+        options: {
+            limit: 15000,
+            name: "./img/[name].[ext]",
+        },
+    }),
 ]);
 
 const developmentConfig = merge([
@@ -66,6 +72,7 @@ const developmentConfig = merge([
         port: 9000/*process.env.PORT*/,
     }),
     parts.loadCSS(),
+    parts.loadImages(),
 
 ]);
 

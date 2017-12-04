@@ -1,11 +1,13 @@
 @import 'colors';
 
 body {
-    background  : $background;
+    background  : url("../img/cornjpg.jpg") no-repeat center;
+    background-size: inherit;
     font-weight : 500;
     color       : $fontColor;
     font-family : "Arial";
-    display     : flex;
+    /*display     : flex;*/
+
 }
 
 .emperor {
