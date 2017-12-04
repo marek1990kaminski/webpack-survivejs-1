@@ -5,5 +5,14 @@ body {
     font-weight : 500;
     color       : $fontColor;
     font-family : "Arial";
-    display: flex;
+    display     : flex;
+}
+
+.emperor {
+    background  : $background;
+    font-weight : 500;
+    color       : $fontColor;
+    font-family : "Arial";
+    display     : flex;
+    border      : 3px solid red;
 }
