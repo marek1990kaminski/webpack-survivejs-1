@@ -44,6 +44,7 @@ const commonConfig = merge([
         },
         plugins: [
             new HtmlWebpackPlugin({
+                /*filename: 'indexx.html',*///this is optional
                 template: './app/index.html',
                 title: "Webpack demo",
             }),
